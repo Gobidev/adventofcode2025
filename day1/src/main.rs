@@ -17,30 +17,27 @@ fn turn(dir: char, dial_pos: isize, turn_count: isize) -> isize {
     }
 }
 
-fn part1(input: &[(char, isize)]) -> isize {
+fn part1(input: &[(char, isize)]) -> usize {
     input
         .iter()
-        .fold((0, 50), |(res, dial), instr| {
-            (
-                if dial == 0 { res + 1 } else { res },
-                turn(instr.0, dial, instr.1),
-            )
+        .scan(50, |dial, instr| {
+            *dial = turn(instr.0, *dial, instr.1);
+            Some(*dial)
         })
-        .0
+        .filter(|dial| *dial == 0)
+        .count()
 }
 
-fn part2(input: &[(char, isize)]) -> isize {
-    let mut dial_pos: isize = 50;
-    let mut res = 0;
-    for instruction in input {
-        for _ in 0..(instruction.1) {
-            dial_pos = turn(instruction.0, dial_pos, 1);
-            if dial_pos == 0 {
-                res += 1;
-            }
-        }
-    }
-    res
+fn part2(input: &[(char, isize)]) -> usize {
+    input
+        .iter()
+        .flat_map(|instr| (0..instr.1).map(|_| (instr.0, 1)))
+        .scan(50, |dial, instr| {
+            *dial = turn(instr.0, *dial, instr.1);
+            Some(*dial)
+        })
+        .filter(|dial| *dial == 0)
+        .count()
 }
 
 fn main() {
