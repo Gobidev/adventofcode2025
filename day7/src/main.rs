@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use ahash::AHashMap;
 
 #[derive(Debug, Eq, PartialEq)]
 enum Tile {
@@ -25,8 +25,8 @@ fn parse(input: &str) -> Vec<Vec<Tile>> {
         .collect()
 }
 
-fn simulate(input: &[Vec<Tile>]) -> HashMap<(usize, usize), usize> {
-    let mut beam_positions = HashMap::new();
+fn simulate(input: &[Vec<Tile>]) -> AHashMap<(usize, usize), usize> {
+    let mut beam_positions = AHashMap::new();
     beam_positions.insert((0, input[0].iter().position(|t| *t == Start).unwrap()), 1);
 
     for (r_idx, row) in input.iter().enumerate().skip(1) {
@@ -58,7 +58,7 @@ fn simulate(input: &[Vec<Tile>]) -> HashMap<(usize, usize), usize> {
     beam_positions
 }
 
-fn part1(input: &[Vec<Tile>], beam_positions: &HashMap<(usize, usize), usize>) -> usize {
+fn part1(input: &[Vec<Tile>], beam_positions: &AHashMap<(usize, usize), usize>) -> usize {
     input
         .iter()
         .enumerate()
@@ -73,7 +73,7 @@ fn part1(input: &[Vec<Tile>], beam_positions: &HashMap<(usize, usize), usize>) -
         .sum()
 }
 
-fn part2(input: &[Vec<Tile>], beam_positions: &HashMap<(usize, usize), usize>) -> usize {
+fn part2(input: &[Vec<Tile>], beam_positions: &AHashMap<(usize, usize), usize>) -> usize {
     beam_positions
         .iter()
         .filter(|((r, _), _)| *r == input.len() - 1)
